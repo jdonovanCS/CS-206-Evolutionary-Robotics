@@ -38,7 +38,7 @@ class NEURAL_NETWORK:
             
             else:
 
-                self.neurons[k].Update_Hidden_Or_Motor_Neuron()
+                self.neurons[k].Update_Hidden_Or_Motor_Neuron(self.neurons, self.synapses)
     
     def Get_Neuron_Names(self):
 
