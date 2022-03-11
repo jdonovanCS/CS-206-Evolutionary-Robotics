@@ -16,3 +16,7 @@ AMPLITUDE = np.pi/4
 FREQUENCY = 10
 PHASE_OFFSET = 0
 TARGET_ANGLES = targetBeforeSin
+
+SLEEP_RATE = 1/60
+
+numberOfGenerations = 10
