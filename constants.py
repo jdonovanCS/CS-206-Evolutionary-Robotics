@@ -19,4 +19,5 @@ TARGET_ANGLES = targetBeforeSin
 
 SLEEP_RATE = 1/60
 
+populationSize = 10
 numberOfGenerations = 10
