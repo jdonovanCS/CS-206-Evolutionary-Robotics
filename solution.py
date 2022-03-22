@@ -33,11 +33,10 @@ class SOLUTION:
         with open(fitnessFileName, 'r') as f:
             self.fitness = np.double(f.read())
         os.system("del {}".format(fitnessFileName))
-        print(self.fitness)
         
     def Create_World(self):
         pyrosim.Start_SDF("world.sdf")
-        pyrosim.Send_Cube(name="Box", pos=[self.x-5,self.y,self.z], size=[self.length,self.width,self.height])
+        # pyrosim.Send_Cube(name="Box", pos=[self.x-5,self.y,self.z], size=[self.length,self.width,self.height])
         pyrosim.End()
 
     def Create_Body(self):
