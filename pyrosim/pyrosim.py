@@ -136,7 +136,11 @@ def Send_Cube(name="default",pos=[0,0,0],size=[1,1,1]):
 
 def Send_Joint(name,parent,child,type,position,jointAxis):
 
+    global joints
+    
     joint = JOINT(name,parent,child,type,position)
+
+    joints.append(joint)
 
     joint.Save(f,jointAxis)
 
@@ -147,6 +151,10 @@ def Send_Motor_Neuron(name,jointName):
 def Send_Sensor_Neuron(name,linkName):
 
     f.write('    <neuron name = "' + str(name) + '" type = "sensor" linkName = "' + linkName + '" />\n')
+
+def Send_Hidden_Neuron(name):
+
+    f.write('   <neuron name = "' + str(name) + '" type= "hidden" />\n')
 
 def Send_Synapse( sourceNeuronName , targetNeuronName , weight ):
 
@@ -211,6 +219,10 @@ def Start_SDF(filename):
 
     links = []
 
+    global joints
+
+    joints = []
+
 def Start_URDF(filename):
 
     global availableLinkIndex
@@ -238,6 +250,10 @@ def Start_URDF(filename):
     global links
 
     links = []
+    
+    global joints
+
+    joints = []
 
 def Start_Model(modelName,pos):
 
