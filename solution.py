@@ -10,7 +10,9 @@ class SOLUTION:
         self.s_h_weights = np.random.rand(c.numSensorNeurons,c.numHiddenNeurons)*2-1
         self.h_m_weights = np.random.rand(c.numHiddenNeurons, c.numMotorNeurons)*2-1
         self.numHiddenNeurons = c.numHiddenNeurons
-        self.h_rec_weights = np.random.rand(c.numHiddenNeurons)*2-1
+        # self.h_rec_weights = np.random.rand(c.numHiddenNeurons)*2-1
+        self.h_rec_weights = np.random.rand(c.numHiddenNeurons, c.numHiddenNeurons)*2-1
+        self.cpg_functions = []
         self.myID = myId
         self.length = 1
         self.width = 1
@@ -91,8 +93,8 @@ class SOLUTION:
             for currentColumn in range(c.numMotorNeurons):
                 pyrosim.Send_Synapse(sourceNeuronName=currentRow+c.numSensorNeurons, targetNeuronName=currentColumn+c.numSensorNeurons+self.numHiddenNeurons, weight=self.h_m_weights[currentRow][currentColumn])
         for currentHidden in range(self.numHiddenNeurons):
-            pyrosim.Send_Synapse(sourceNeuronName=c.numSensorNeurons+currentHidden, targetNeuronName=c.numSensorNeurons+currentHidden, weight=self.h_rec_weights[currentHidden])
-            # for anotherHidden in range(self.numHiddenNeurons):
+            for anotherHidden in range(currentHidden, self.numHiddenNeurons):
+                pyrosim.Send_Synapse(sourceNeuronName=currentHidden+c.numSensorNeurons, targetNeuronName=c.numSensorNeurons+anotherHidden, weight=self.h_rec_weights[currentHidden][anotherHidden])
 
 
         pyrosim.End()
@@ -110,13 +112,18 @@ class SOLUTION:
                 self.h_m_weights[randomRow][randomColumn] *= (np.random.rand() * 2 -1)
             case 2: # modify random recurrent weight
                 randomHidden = random.randint(0, self.numHiddenNeurons-1)
-                self.h_rec_weights[randomHidden] *= (np.random.rand() * 2 - 1)
+                randomOtherHidden = random.randint(randomHidden, self.numHiddenNeurons-1)
+                self.h_rec_weights[randomHidden][randomOtherHidden] *= (np.random.rand() * 2 - 1)
             case 3: # add hidden neuron with random weight connections from sensors, to motors, and recurrent
                 self.numHiddenNeurons += 1
                 new_col = (np.random.rand(c.numSensorNeurons) * 2 - 1).reshape(c.numSensorNeurons, 1)
                 self.s_h_weights = np.concatenate((self.s_h_weights, new_col), 1)
                 new_row = (np.random.rand(c.numMotorNeurons)*2-1).reshape(1,c.numMotorNeurons)
                 self.h_m_weights = np.concatenate((self.h_m_weights, new_row))
-                self.h_rec_weights = np.append(self.h_rec_weights, np.random.rand()*2-1)
+                new_row = (np.random.rand(self.numHiddenNeurons-1)*2-1).reshape(1,self.numHiddenNeurons-1)
+                new_col = (np.random.rand(self.numHiddenNeurons)*2-1).reshape(self.numHiddenNeurons, 1)
+                # self.h_rec_weights = np.append(self.h_rec_weights, np.random.rand()*2-1)
+                self.h_rec_weights = np.concatenate((self.h_rec_weights, new_row))
+                self.h_rec_weights = np.concatenate((self.h_rec_weights, new_col), 1)
             case 4:
                 return

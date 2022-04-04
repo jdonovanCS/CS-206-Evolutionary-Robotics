@@ -64,6 +64,7 @@ class PARALLEL_HILL_CLIMBER:
             if self.parents[k].fitness < best_value:
                 best_value = self.parents[k].fitness
                 best_key = k
+        print('Best Robot Fitness: {}\nBest Robot Num Hidden: {}\nBest Robot Weights:\n\tSensor_to_Hidden: {}\n\tHidden_to Hidden: {}\n\tHidden_to_Motor: {}\n\n'.format(best_value, self.parents[best_key].numHiddenNeurons, self.parents[best_key].s_h_weights, self.parents[best_key].h_rec_weights, self.parents[best_key].h_m_weights))
         self.parents[best_key].Start_Simulation('GUI')
         
 
