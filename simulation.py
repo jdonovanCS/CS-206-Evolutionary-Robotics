@@ -4,6 +4,7 @@ import pybullet as p
 import pybullet_data
 import time
 import constants as c
+import sys
 
 class SIMULATION:
     def __init__(self, directOrGUI, solutionID):
@@ -13,7 +14,8 @@ class SIMULATION:
             self.physicsClient = p.connect(p.DIRECT)
         else:
             self.physicsClient = p.connect(p.GUI)
-            p.startStateLogging(loggingType=3, fileName='video_of_best.mp4')
+            fileName = 'video_of_best.mp4'
+            p.startStateLogging(loggingType=p.STATE_LOGGING_VIDEO_MP4, fileName=fileName)
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
         p.setGravity(0,0,-9.8)
         self.world = WORLD(solutionID)

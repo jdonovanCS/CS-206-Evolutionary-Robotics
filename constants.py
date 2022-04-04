@@ -19,8 +19,8 @@ TARGET_ANGLES = targetBeforeSin
 
 SLEEP_RATE = 1/60
 
-populationSize = 4
-numberOfGenerations = 20
+populationSize = 40
+numberOfGenerations = 200
 
 numSensorNeurons = 9
 numMotorNeurons = 8
