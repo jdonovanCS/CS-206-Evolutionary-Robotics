@@ -7,6 +7,7 @@ import constants as c
 
 class SOLUTION:
     def __init__(self, myId):
+        # For del3 add cpg as a hidden neuron with input to motors? or hiddens? Also add to mutation
         self.s_h_weights = np.random.rand(c.numSensorNeurons,c.numHiddenNeurons)*2-1
         self.h_m_weights = np.random.rand(c.numHiddenNeurons, c.numMotorNeurons)*2-1
         self.numHiddenNeurons = c.numHiddenNeurons
@@ -102,9 +103,9 @@ class SOLUTION:
     def Mutate(self):
         # action = random.randint(0, 3)
         total_synapses = (c.numSensorNeurons*self.numHiddenNeurons) + (self.numHiddenNeurons*c.numMotorNeurons) + (self.numHiddenNeurons*(self.numHiddenNeurons+1/2))
-        new_node_prob = (c.numHiddenNeurons/self.numHiddenNeurons)*total_synapses
+        new_node_prob = int(c.numHiddenNeurons/self.numHiddenNeurons)*total_synapses
         action = random.randint(0, total_synapses+new_node_prob)
-        if action < c.numSensorNeurons*self.numHiddenNeruons: # modify random sensor->hidden weight
+        if action < c.numSensorNeurons*self.numHiddenNeurons: # modify random sensor->hidden weight
             randomRow = random.randint(0, c.numSensorNeurons-1)
             randomColumn = random.randint(0, self.numHiddenNeurons-1)
             self.s_h_weights[randomRow][randomColumn] *= (np.random.rand() * 2 -1)
