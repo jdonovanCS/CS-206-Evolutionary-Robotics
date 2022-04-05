@@ -17,7 +17,7 @@ class PARALLEL_HILL_CLIMBER:
             self.nextAvailableID += 1
         self.currentGeneration=0
         wandb.init('parallel-hill-climber')
-        wandb.config.version='quadruped-before-fp'
+        wandb.config.version='fp-base'
 
     def Evolve(self):
         self.Evaluate(self.parents)
