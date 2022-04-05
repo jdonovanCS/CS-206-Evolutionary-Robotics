@@ -18,6 +18,7 @@ class PARALLEL_HILL_CLIMBER:
         self.currentGeneration=0
         wandb.init('parallel-hill-climber')
         wandb.config.version='deliverable 2'
+        wandb.config.population=c.populationSize
     
     def Evolve(self):
         self.Evaluate(self.parents)
