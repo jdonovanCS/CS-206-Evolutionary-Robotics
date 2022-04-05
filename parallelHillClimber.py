@@ -35,7 +35,28 @@ class PARALLEL_HILL_CLIMBER:
         self.Select()
 
     def Spawn(self):
-@@ -57,6 +63,15 @@ def Print(self):
+        self.children = {}
+        for k in self.parents:
+            self.children[k] = copy.deepcopy(self.parents[k])
+            self.children[k].Set_ID(self.nextAvailableID)
+            self.nextAvailableID += 1
+
+    def Mutate(self):
+        for k in self.children:
+           self.children[k].Mutate()
+    def Evaluate(self, solutions):
+        for k in solutions:
+            solutions[k].Start_Simulation('DIRECT')
+        for k in solutions:
+            solutions[k].Wait_For_Simulation_To_End()
+    def Select(self):
+        for k in self.parents:
+            if self.children[k].fitness < self.parents[k].fitness:
+                self.parents[k] = copy.deepcopy(self.children[k])
+
+    def Print(self):
+        print()
+        for k in self.parents:
             print('parent: {}, child: {}'.format(self.parents[k].fitness, self.children[k].fitness))
         print()
 
