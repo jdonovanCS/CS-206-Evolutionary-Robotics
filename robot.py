@@ -9,13 +9,14 @@ import constants as c
 class ROBOT:
     def __init__(self, solutionID):
         self.motors = {}
-        self.robot = p.loadURDF("body.urdf")
+        self.robot = p.loadURDF("body{}.urdf".format(solutionID))
         self.solutionID = solutionID
         pyrosim.Prepare_To_Simulate(self.robot)
         self.Prepare_To_Sense()
         self.Prepare_To_Act()
         self.nn = NEURAL_NETWORK("brain{}.nndf".format(solutionID))
-        os.system("del brain{}.nndf".format(solutionID))
+        os.system('del \"brain{}.nndf\"'.format(solutionID))
+        os.system('del \"body{}.urdf\"'.format(solutionID))
 
 
     def Prepare_To_Sense(self):
@@ -37,6 +38,7 @@ class ROBOT:
             if self.nn.Is_Motor_Neuron(neuronName):
                 jointName = self.nn.Get_Motor_Neurons_Joint(neuronName)
                 desiredAngle = self.nn.Get_Value_Of(neuronName) * c.motorJointRange
+                # desiredAngle = self.nn.Get_Value_Of(neuronName)
                 self.motors[jointName].Set_Value(self.robot, desiredAngle)
 
     def Think(self):
@@ -44,11 +46,11 @@ class ROBOT:
         # self.nn.Print()
 
     def Get_Fitness(self):
-        stateOfLinkZero = p.getLinkState(self.robot,0)
-        positionOfLinkZero = stateOfLinkZero[0]
-        xCoordinateOfLinkZero = positionOfLinkZero[0]
+        basePositionAndOrientation = p.getBasePositionAndOrientation(self.robot)
+        basePosition = basePositionAndOrientation[0]
+        xPosition = basePosition[0]
         with open('tmp{}.txt'.format(self.solutionID), 'w') as f:
-            f.write(str(xCoordinateOfLinkZero))
+            f.write(str(xPosition))
         os.rename('tmp{}.txt'.format(self.solutionID), 'fitness{}.txt'.format(self.solutionID))
 
     def Save_Values(self):
