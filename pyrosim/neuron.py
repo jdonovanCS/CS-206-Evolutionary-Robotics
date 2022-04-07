@@ -14,6 +14,8 @@ class NEURON:
 
         self.Determine_Type(line)
 
+        self.Determine_Activation_Fn(line)
+
         self.Search_For_Link_Name(line)
 
         self.Search_For_Joint_Name(line)
@@ -37,7 +39,7 @@ class NEURON:
         return self.name
 
     def Get_Value(self):
-
+            
         return self.value
 
     def Is_Sensor_Neuron(self):
@@ -65,6 +67,17 @@ class NEURON:
                 self.Allow_Presynaptic_Neuron_To_Influence_Me(synapses[k].Get_Weight(), neurons[k[0]].Get_Value())
         
         self.Threshold()
+
+        self.Activate()
+
+
+    # def Update_CPG_Neuron(self, neurons, synapses):
+
+    #     for k in synapses.keys():
+
+    #         if k[1] == self.Get_Name():
+
+    #             self.Allow_Presynaptic_Neuron_To_Influence_Me(synapses[k].Get_Weight(), neurons[k[0]].Get_Value())
 
 
     def Allow_Presynaptic_Neuron_To_Influence_Me(self, weight, value):
@@ -108,6 +121,14 @@ class NEURON:
         else:
 
             self.type = c.HIDDEN_NEURON
+    
+    def Determine_Activation_Fn(self,line):
+
+        if "activation_fn" in line:
+
+            splitLine = line.split('"')
+
+            self.activation_fn = splitLine[3]
 
     def Print_Name(self):
 
@@ -139,4 +160,34 @@ class NEURON:
 
     def Threshold(self):
 
-        self.value = math.tanh(self.value)
+        # self.value = math.tanh(self.value)
+        
+        if self.activation_fn == "sin":
+            
+            self.value = math.sin(self.value)
+
+        elif self.activation_fn == "sigmoid":
+
+            if self.value >= 0:
+
+                self.value = 1 / (1 + math.exp(-self.value))
+            
+            else:
+                
+                self.value = 1 / (1 + math.exp(self.value))
+
+        elif self.activation_fn == "relu":
+
+            self.value = max(0, self.value)
+
+        elif self.activation_fn == "leakyrelu":
+
+            if self.value < 0:
+                
+                self.value = 0.01 * self.value
+        
+        else:
+
+            self.value = math.tanh(self.value)
+
+        

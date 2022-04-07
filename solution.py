@@ -13,7 +13,8 @@ class SOLUTION:
         self.numHiddenNeurons = c.numHiddenNeurons
         # self.h_rec_weights = np.random.rand(c.numHiddenNeurons)*2-1
         self.h_rec_weights = np.random.rand(c.numHiddenNeurons, c.numHiddenNeurons)*2-1
-        self.cpg_functions = []
+        self.h_act = ["tanh" for x in range(self.numHiddenNeurons)]
+        self.act_options = ["tanh", "sin", "sigmoid", "relu", "leakyrelu"]
         self.myID = myId
         self.length = 1
         self.width = 1
@@ -82,7 +83,7 @@ class SOLUTION:
             pyrosim.Send_Sensor_Neuron(name=i, linkName=pyrosim.links[i].name)
 
         for j in range(0, self.numHiddenNeurons):
-            pyrosim.Send_Hidden_Neuron(name=j+c.numSensorNeurons)
+            pyrosim.Send_Hidden_Neuron(name=j+c.numSensorNeurons, activation_fn=self.h_act[j])
 
         for k in range(0, c.numMotorNeurons):
             pyrosim.Send_Motor_Neuron(name=k+self.numHiddenNeurons+c.numSensorNeurons, jointName=pyrosim.joints[k].name)
@@ -104,7 +105,8 @@ class SOLUTION:
         # action = random.randint(0, 3)
         total_synapses = (c.numSensorNeurons*self.numHiddenNeurons) + (self.numHiddenNeurons*c.numMotorNeurons) + (self.numHiddenNeurons*(self.numHiddenNeurons+1/2))
         new_node_prob = int(c.numHiddenNeurons/self.numHiddenNeurons)*total_synapses
-        action = random.randint(0, total_synapses+new_node_prob)
+        change_act_prob = int(self.numHiddenNeurons/(self.numHiddenNeurons+c.numSensorNeurons+c.numMotorNeurons))*total_synapses
+        action = random.randint(0, total_synapses+new_node_prob+change_act_prob)
         if action < c.numSensorNeurons*self.numHiddenNeurons: # modify random sensor->hidden weight
             randomRow = random.randint(0, c.numSensorNeurons-1)
             randomColumn = random.randint(0, self.numHiddenNeurons-1)
@@ -119,14 +121,18 @@ class SOLUTION:
             self.h_rec_weights[randomHidden][randomOtherHidden] *= (np.random.rand() * 2 - 1)
         elif action < total_synapses + new_node_prob: # add hidden neuron with random weight connections from sensors, to motors, and recurrent
             self.numHiddenNeurons += 1
-            new_col = (np.random.rand(c.numSensorNeurons) * 2 - 1).reshape(c.numSensorNeurons, 1)
+            new_col = (np.zeros(c.numSensorNeurons) * 2 - 1).reshape(c.numSensorNeurons, 1)
             self.s_h_weights = np.concatenate((self.s_h_weights, new_col), 1)
-            new_row = (np.random.rand(c.numMotorNeurons)*2-1).reshape(1,c.numMotorNeurons)
+            new_row = (np.zeros(c.numMotorNeurons)*2-1).reshape(1,c.numMotorNeurons)
             self.h_m_weights = np.concatenate((self.h_m_weights, new_row))
-            new_row = (np.random.rand(self.numHiddenNeurons-1)*2-1).reshape(1,self.numHiddenNeurons-1)
-            new_col = (np.random.rand(self.numHiddenNeurons)*2-1).reshape(self.numHiddenNeurons, 1)
+            new_row = (np.zeros(self.numHiddenNeurons-1)*2-1).reshape(1,self.numHiddenNeurons-1)
+            new_col = (np.zeros(self.numHiddenNeurons)*2-1).reshape(self.numHiddenNeurons, 1)
             # self.h_rec_weights = np.append(self.h_rec_weights, np.random.rand()*2-1)
             self.h_rec_weights = np.concatenate((self.h_rec_weights, new_row))
             self.h_rec_weights = np.concatenate((self.h_rec_weights, new_col), 1)
+            self.h_act.append("tanh")
+        elif action < total_synapses + new_node_prob + change_act_prob:
+            randomHidden = random.randint(0, self.numHiddenNeurons-1)
+            self.h_act[randomHidden] = np.random.choice(self.act_options, 1)
         else:
             return
