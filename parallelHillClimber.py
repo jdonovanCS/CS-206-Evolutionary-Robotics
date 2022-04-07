@@ -68,7 +68,7 @@ class PARALLEL_HILL_CLIMBER:
             if self.parents[k].fitness < best_value:
                 best_value = self.parents[k].fitness
                 best_key = k
-        wandb.log({'gen': self.currentGeneration, 'best_fitness': best_value, 'num_hidden': 0})
+        wandb.log({'gen': self.currentGeneration, 'best_fitness': best_value, 'num_hidden': self.parents[best_key].numHiddenNeurons, 'avg_fitness': np.mean([self.parents[k].fitness for k in self.parents]), 'avg_hidden': np.mean([self.parents[k].numHiddenNeurons for k in self.parents])})
 
     def Show_Best(self):
         best_key = 0
