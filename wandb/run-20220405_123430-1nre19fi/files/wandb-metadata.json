@@ -1,0 +1,24 @@
+{
+    "os": "Windows-10-10.0.19044-SP0",
+    "python": "3.10.3",
+    "heartbeatAt": "2022-04-05T16:34:31.776491",
+    "startedAt": "2022-04-05T16:34:30.799033",
+    "docker": null,
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "gpu_count": 1,
+    "cpu_count": 16,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "C:\\Users\\Jordan\\Learning\\UVM\\Courses\\CS-206-Evolutionary-Robotics\\search.py",
+    "codePath": "search.py",
+    "git": {
+        "remote": "https://github.com/jdonovanCS/CS-206-Evolutionary-Robotics",
+        "commit": "3834a850d5b05c93b30c1f8db9ff1dca9d49493d"
+    },
+    "email": "jordan.t.donovancs@gmail.com",
+    "root": "C:/Users/Jordan/Learning/UVM/Courses/CS-206-Evolutionary-Robotics",
+    "host": "LAPTOP-AUS3EALC",
+    "username": "Jordan",
+    "executable": "C:\\Users\\Jordan\\anaconda3\\envs\\ER\\python.exe"
+}
