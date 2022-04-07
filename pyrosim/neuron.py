@@ -68,8 +68,6 @@ class NEURON:
         
         self.Threshold()
 
-        self.Activate()
-
 
     # def Update_CPG_Neuron(self, neurons, synapses):
 
@@ -129,6 +127,10 @@ class NEURON:
             splitLine = line.split('"')
 
             self.activation_fn = splitLine[3]
+        
+        else:
+            
+            self.activation_fn = "tanh"
 
     def Print_Name(self):
 
@@ -160,8 +162,6 @@ class NEURON:
 
     def Threshold(self):
 
-        # self.value = math.tanh(self.value)
-        
         if self.activation_fn == "sin":
             
             self.value = math.sin(self.value)
