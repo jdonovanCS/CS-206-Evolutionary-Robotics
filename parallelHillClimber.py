@@ -72,9 +72,7 @@ class PARALLEL_HILL_CLIMBER:
             if self.parents[k].fitness < best_value:
                 best_value = self.parents[k].fitness
                 best_key = k
-        print('count_sh: {}'.format(np.count_nonzero(self.parents[best_key].s_h_weights)))
-        print('num_synapses: {}'.format(sum([np.count_nonzero(self.parents[best_key].s_h_weights), np.count_nonzero(self.parents[best_key].h_m_weights), np.count_nonzero(self.parents[best_key].h_rec_weights)])))
-        print('avg_synapses: {}'.format(np.mean([sum([np.count_nonzero(self.parents[k].s_h_weights), np.count_nonzero(self.parents[k].h_m_weights), np.count_nonzero(self.parents[k].h_rec_weights)]) for k in self.parents])))
+        
         wandb.log({'gen': self.currentGeneration, 
                     'best_fitness': best_value, 
                     'num_hidden': self.parents[best_key].numHiddenNeurons, 
