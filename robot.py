@@ -5,6 +5,7 @@ import pyrosim.pyrosim as pyrosim
 from pyrosim.neuralNetwork import NEURAL_NETWORK
 import os
 import constants as c
+import numpy as np
 
 class ROBOT:
     def __init__(self, solutionID):
@@ -23,10 +24,14 @@ class ROBOT:
         self.sensors = {}
         for linkName in pyrosim.linkNamesToIndices:
             self.sensors[linkName] = SENSOR(linkName)
+        self.footprint_graph = np.zeros((len(self.sensors)*10, c.STEPS))
 
     def Sense(self, timestep):
-        for s in self.sensors.values():
+        for i, s in enumerate(self.sensors.values()):
             s.Get_Value(timestep)
+            self.footprint_graph[i*10:(i*10)+10, timestep] = s.values[timestep]
+            self.footprint_graph[i*10:(i*10+2), timestep] = 0
+            self.footprint_graph[(i*10)+8:(i*10)+10, timestep] = 0
 
     def Prepare_To_Act(self):
         self.motors = {}

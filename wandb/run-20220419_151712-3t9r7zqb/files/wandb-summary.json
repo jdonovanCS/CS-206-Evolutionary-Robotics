@@ -1,0 +1,1 @@
+{"footprint_graph": {"_type": "image-file", "path": "media/images/footprint_graph_0_3df534e2c0b73152d519.png", "sha256": "3df534e2c0b73152d519e9632bf408b590deb59560e3c21ccff8fd814d4462be", "size": 603, "format": "png", "width": 1000, "height": 90, "caption": "footprint_graph"}, "_timestamp": 1650395833, "_runtime": 1, "_step": 0, "_wandb": {"runtime": 1}}
