@@ -5,6 +5,8 @@ import pybullet_data
 import time
 import constants as c
 import sys
+import matplotlib.pyplot as plt
+import wandb
 
 class SIMULATION:
     def __init__(self, directOrGUI, solutionID):
@@ -29,6 +31,19 @@ class SIMULATION:
             self.robot.Act(i)
             if self.directOrGUI == 'GUI':
                 time.sleep(c.SLEEP_RATE)
+                if i == c.STEPS-1:
+                    api = wandb.Api()
+                    runs = api.runs(path="jdonovan/CS-206-Evolutionary-Robotics", filters={"config.version": "deliverable 3", "config.population": c.populationSize}, order="-created_at", per_page=10)
+                    run=runs[0]
+                    image = wandb.Image(self.robot.footprint_graph, caption="footprint_graph")
+                    print('logging footprint')
+                    run2 = api.run(path="jdonovan/CS-206-Evolutionary-Robotics/" + run.path[2])
+                    run2.config = run.config
+                    wandb.init(id=run.path[2])
+                    wandb.log({'footprint_graph': image})
+                    wandb.finish()
+                    run2.update()
+                    print('done logging')
 
     def Get_Fitness(self):
         self.robot.Get_Fitness()
